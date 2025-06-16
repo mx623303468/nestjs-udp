@@ -156,7 +156,7 @@ All responses are JSON-encoded. The data field contains the application-level re
 
 #### All UDP messages are serialized to JSON strings:
 
-> `pattern.host`与`pattern.port`为可选字段，用于动态指定目标地址。
+> The fields `pattern.host` and `pattern.port` are optional and are used to dynamically specify the target address.
 
 1. Static target:
 
