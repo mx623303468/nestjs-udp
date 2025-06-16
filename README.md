@@ -11,15 +11,10 @@ A high-performance UDP communication module based on the NestJS microservices fr
 ## ✨ Features
 
 - 🚀 Define handlers using Nest-style @UdpPattern() decorators
--
 - 📦 Built-in UdpClientProxy supporting both sync and async messaging
--
 - 🧩 Fully modular — import via UdpModule.register()
--
 - 🧠 Pattern-based routing, consistent with HTTP/RPC style
--
 - 🔧 Configurable host, port, multicast, and socket type
--
 - 📈 Built-in sequence diagrams to illustrate common use cases
 
 ---
