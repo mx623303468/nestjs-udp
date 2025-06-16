@@ -1,5 +1,7 @@
 [![npm version](https://img.shields.io/npm/v/nestjs-udp.svg)](https://www.npmjs.com/package/nestjs-udp) [![license](https://img.shields.io/npm/l/nestjs-udp.svg)](LICENSE)
 
+[English](README.md) | [🇨🇳 中文文档](README-CN.md)
+
 > NestJS UDP Communication Module — Seamlessly integrate UDP protocol into your Nest application with routing, reactive response handling, and dynamic targeting.
 
 # nestjs-udp
@@ -69,13 +71,13 @@ import { UdpPattern, UDP_CLIENT, UdpContext } from "nestjs-udp";
 @Controller()
 export class AppController {
   constructor(
-    // 注入UdpClientProxy 客户端， 用于发送UDP消息
+    // Inject UdpClientProxy client for sending UDP messages
     @Inject(UDP_CLIENT) private readonly udpClient: ClientProxy
   ) {}
-  // 定义pattern为udp:ping的函数
-  // @Payload() data: any 为消息负载
-  // @Ctx() ctx: UdpContext 为UdpContext实例，包含目标地址信息
-  // 返回值作为响应
+  // Define a handler for pattern "UDP:ping"
+  // @Payload() data: message payload
+  // @Ctx() ctx: UdpContext instance with source address information
+  // Return value will be sent as UDP response
   @UdpPattern("UDP:ping")
   ping(data: any) {
     return {
@@ -83,7 +85,7 @@ export class AppController {
     };
   }
 
-  // 函数无返回值则不返回响应
+  // No return value means no response will be sent
   @MessagePattern("UDP:noResponse")
   pingResponse(@Payload() data: any, @Ctx() ctx: UdpContext) {
     console.log("no response", data);
@@ -91,9 +93,9 @@ export class AppController {
 
   @Get("await")
   async pingUdp() {
-    // this.udpClient.send 返回一个 Observable
-    // 可使用 RxJS 操作符处理响应
-    // 调用本机UDP服务，同步等待响应
+    // this.udpClient.send returns an Observable
+    //  You can use RxJS operators to handle the response
+    // Synchronously wait for UDP response from local server
     const res = await firstValueFrom(
       this.udpClient.send({ cmd: "UDP:ping" }, "hello world")
     );
@@ -102,32 +104,32 @@ export class AppController {
 
   @Get("async")
   async pingAsync() {
-    // 不同步等待响应，异步发送，不处理响应
-    // 动态指定目标地址
+    // Send UDP message without waiting for a response (fire-and-forget)
+    // Dynamically specify destination address
     this.udpClient
       .send({ cmd: "UDP:ping", host: "127.0.0.1", port: 43210 }, "balabala")
       .subscribe();
 
-    return "发送成功";
+    return "Sent successfully";
   }
 
   @Get("async-awit")
   async pingAsyncAwait() {
-    // 不同步等待响应，异步发送，异步处理
-    // 动态指定目标地址
+    // Send UDP message and handle response asynchronously
+    // Dynamically specify destination address
     this.udpClient.send({ cmd: "UDP:ping" }, "balabala").subscribe({
       next: (res) => {
-        console.log("响应", res);
+        console.log("response", res);
       },
       error: (err) => {
-        console.log("错误", err);
+        console.log("error", err);
       },
       complete: () => {
-        console.log("完成");
+        console.log("completed");
       },
     });
 
-    return "发送成功";
+    return "Sent successfully";
   }
 }
 ```
